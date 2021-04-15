@@ -1,0 +1,19 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © LodgePrime
+
+//@version=4
+study(shorttitle = "OpenWolf",title = "OpenWolf",precision=2)
+
+Delta = input(3, title = 'MACD Fast Length', type = input.integer)
+Alpha = input(8, title = 'MACD Slow Length', type = input.integer)
+updateBarColor = input(true, title = 'Update bar color', type = input.bool)
+
+plot(0, title = "Zero line", linewidth = 1, color = color.white)
+
+[Gamma,q,_] = macd(close[0], Delta, Alpha, 21)
+
+GammaColor = Gamma > 0 ? color.lime : color.red
+plot(Gamma, style = plot.style_line, color = GammaColor, linewidth = 1)
+
+BarColor = updateBarColor ? (Gamma > 0 ? color.lime : color.red) : na
+barcolor(color=BarColor)
