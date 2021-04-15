@@ -30,8 +30,8 @@
 //      - HT Candle is red
 //      - WT > 0 and crossed down
 
-strategy("Booboo Kitty Fuck Back test", overlay=true)
-//study(title = 'Booboo Kitty Fuck Entrace Indicator', shorttitle = 'Booboo Kitty Fuck Entrace Indicator', overlay=true)
+strategy("Booboo Kitty Fudge Back test", overlay=true)
+//study(title = 'Booboo Kitty Fudge Entrace Indicator', shorttitle = 'Booboo Kitty Fuck Entrace Indicator', overlay=true)
 
 // PARAMETERS {
 
