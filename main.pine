@@ -30,8 +30,8 @@
 //      - HT Candle is red
 //      - WT > 0 and crossed down
 
-strategy("Booboo Kitty Fudge Back test", overlay=true)
-//study(title = 'Booboo Kitty Fudge Entrace Indicator', shorttitle = 'Booboo Kitty Fuck Entrace Indicator', overlay=true)
+//strategy("Booboo Kitty Fudge Back test", overlay=true, initial_capital=5000)
+study(title = 'Booboo Kitty Fudge Entrace Indicator', shorttitle = 'Booboo Kitty Fudge Entrace Indicator', overlay=true)
 
 // PARAMETERS {
 
@@ -487,28 +487,21 @@ wtGoldBuy = ((wtShowDiv and wtBullDiv) or (rsiShowDiv and rsiBullDiv)) and
 // ALERTS {
   
 // BUY
-alertcondition(buySignal, 'Buy (Big green circle)', 'Green circle WaveTrend Oversold')
-alertcondition(buySignalDiv, 'Buy (Big green circle + Div)', 'Buy & WT Bullish Divergence & WT Overbought')
-alertcondition(wtGoldBuy, 'GOLD Buy (Big GOLDEN circle)', 'Green & GOLD circle WaveTrend Overbought')
-alertcondition(sommiBullish or sommiBullishDiamond, 'Sommi bullish flag/diamond', 'Blue flag/diamond')
-alertcondition(wtCross and wtCrossUp, 'Buy (Small green dot)', 'Buy small circle')
+//alertcondition(buySignal, 'Buy (Big green circle)', 'Green circle WaveTrend Oversold')
+//alertcondition(buySignalDiv, 'Buy (Big green circle + Div)', 'Buy & WT Bullish Divergence & WT Overbought')
+//alertcondition(wtGoldBuy, 'GOLD Buy (Big GOLDEN circle)', 'Green & GOLD circle WaveTrend Overbought')
+//alertcondition(sommiBullish or sommiBullishDiamond, 'Sommi bullish flag/diamond', 'Blue flag/diamond')
+//alertcondition(wtCross and wtCrossUp, 'Buy (Small green dot)', 'Buy small circle')
 
 // SELL
-alertcondition(sommiBearish or sommiBearishDiamond, 'Sommi bearish flag/diamond', 'Purple flag/diamond')
-alertcondition(sellSignal, 'Sell (Big red circle)', 'Red Circle WaveTrend Overbought')
-alertcondition(sellSignalDiv, 'Sell (Big red circle + Div)', 'Buy & WT Bearish Divergence & WT Overbought')
-alertcondition(wtCross and wtCrossDown, 'Sell (Small red dot)', 'Sell small circle')
+//alertcondition(sommiBearish or sommiBearishDiamond, 'Sommi bearish flag/diamond', 'Purple flag/diamond')
+//alertcondition(sellSignal, 'Sell (Big red circle)', 'Red Circle WaveTrend Overbought')
+//alertcondition(sellSignalDiv, 'Sell (Big red circle + Div)', 'Buy & WT Bearish Divergence & WT Overbought')
+//alertcondition(wtCross and wtCrossDown, 'Sell (Small red dot)', 'Sell small circle')
 
 // } ALERTS
 
 ////////// entry and exit 
-f_macd2(src, fastlen, slowlen, sigsmooth, tf) =>
-    fast_ma = security(syminfo.tickerid, tf, ema(src, fastlen))
-    slow_ma = security(syminfo.tickerid, tf, ema(src, slowlen))
-    macd = fast_ma - slow_ma,
-    signal = security(syminfo.tickerid, tf, sma(macd, sigsmooth))
-    hist = macd - signal
-    [macd, signal, hist]
 
 f_timeframeParams() =>
     if timeframe.period == "1"
@@ -582,7 +575,7 @@ GammaColor = Gamma > 0 ? color.lime : color.red
 
 // ------- 4 hour Wave Trend  -------
 // resMult = input(8)
-resMult = input(0.25)
+resMult =  input(8, title = 'Timeframe Overlay Multiplier', type = input.float)
 
 // Returns a multiple of current TF as a string usable with "security()".
 f_MultipleOfRes( _mult) => 
@@ -619,10 +612,10 @@ timeframe_4h = f_MultipleOfRes(resMult)
 //signalColor_4h = wt2_4h - wt1_4h > 0 ? color.purple : color.aqua
 //plot(wtCross_4h ? wt2_4h : na, title = '4h Buy and sell circle', color = signalColor_4h, style = plot.style_circles, linewidth = 5, transp = 15, offset=0)
 
-close4h = security(syminfo.tickerid, timeframe_4h, close[0])
+//close4h = security(syminfo.tickerid, timeframe_4h, close[0])
 
 // wolfpack 4 hour
-[Gamma4h,_,_] = macd(close4h[0], Delta, Alpha, 21)
+//[Gamma4h,_,_] = macd(close4h[0], Delta, Alpha, 21)
 
 
 // 4hour levels
@@ -633,13 +626,14 @@ wtOversold4h = wt2_4h <= -45
 
 buySignal4h = wtCross_4h and wtCrossUp_4h and wtOversold4h // and rsiMfiBuy4h
 
-buySig4h = buySignal4h[0] or buySignal4h[1] or buySignal4h[2] or buySignal4h[3]
-primaryBuy4h = buySig4h and crossover(Gamma4h, 0) 
-plotshape(buySignal4h ? -106 : na, style=shape.circle, color=color.aqua, location=location.belowbar, size=size.normal, title="primaryBuy4h", transp=0)
-
+//buySig4h = buySignal4h[0] or buySignal4h[1] or buySignal4h[2] or buySignal4h[3]
+//primaryBuy4h = buySig4h and crossover(Gamma4h, 0) 
+plotshape(buySignal4h ? -106 : na, style=shape.circle, color=color.green, location=location.belowbar, size=size.normal, title="Timeframe Overlay", transp=50)
 //sellSignal4h = wtCross_4h and wtCrossDown_4h //and wtOverbought_4h
-//plotshape(sellSignal4h ? -106 : na, style=shape.circle, color=color.purple, location=location.abovebar, size=size.normal, title="primaryBuy4h", transp=0)
+//plotshape(sellSignal4h ? -106 : na, style=shape.circle, color=color.red, location=location.abovebar, size=size.normal, title="primaryBuy4h", transp=50)
 
+plotshape(buySignalDiv ? -106 : na, style=shape.triangleup, color=color.purple, location=location.belowbar, size=size.normal, title="Giant Green Dot Signal", transp=0)
+alertcondition(buySignalDiv, 'Buy (Purple Arrow)', 'Purple Arrow WaveTrend Oversold')
 
 ////signal_4h = wt2_4h - wt1_4h > 0 ? false : true
 
@@ -655,7 +649,8 @@ plotshape(buySignal4h ? -106 : na, style=shape.circle, color=color.aqua, locatio
 
 // trigger wave entry
 buyTriggerWave = ( wtCross and wtCrossUp and wt2 >= -16 and wt2 < 0 ) //and not closeExit
-plotshape(buyTriggerWave ? -106 : na, style=shape.triangleup, color=color.blue, location=location.belowbar, size=size.small, title="trigger wave", transp=0)
+plotshape(buyTriggerWave ? -106 : na, style=shape.triangleup, color=color.blue, location=location.belowbar, size=size.small, title="Trigger Wave", transp=0)
+alertcondition(buyTriggerWave, 'Buy (Blue Arrow)', 'Blue Arrow Trigger Wave')
 
 //if buySignalJay
 //    plotchar(buySignalJay ? -106 : na, title = 'test', char='•', color = buySignalDiv_color, location = location.absolute, size = size.small, offset = -2, transp = 15)
@@ -666,11 +661,15 @@ buySig = buySignalJay[0] or buySignalJay[1] or buySignalJay[2] or buySignalJay[3
 
 // pre-buy flag
 plotshape(buySignalJay ? -106 : na, style=shape.circle, color=color.orange, location=location.belowbar, size=size.tiny, title="Pre-buy flag", transp=0)
+alertcondition(buySignalJay, 'Pre-buy Flag (Orange Circle)', 'Orange Circle Pre-buy Flag')
+
 //plotshape(buySignalLastFour and crossover(Gamma, 0) ? -106 : na, style=shape.flag, color=color.blue, location=location.belowbar, size=size.tiny, title="buy Signal", transp=0)
 
 // primary buy signal
 primaryBuy = buySig and crossover(Gamma, 0) and not buyTriggerWave //and not closeExit
 plotshape(primaryBuy ? -106 : na, style=shape.triangleup, color=color.lime, location=location.belowbar, size=size.small, title="Primary Buy Signal", transp=0)
+alertcondition(primaryBuy, 'Primary Buy (Lime Arrow)', 'Lime Arrow Primary Buy')
+
 
 // secondary buy signals
 secondaryBuy = rsiMFI >= 0 and crossover(Gamma, 0) and not primaryBuy and not buyTriggerWave //and not closeExit
@@ -682,22 +681,21 @@ plotshape(secondaryBuy2 ? -106 : na, style=shape.triangleup, color=color.lime, l
 // MFI + wolf crossover
 //plotshape(wtCross and wtCrossUp ? -106 : na, style=shape.circle, color=color.lime, location=location.belowbar, size=size.tiny, title="buy Signal", transp=70)
 
-
-
 // plotshape(buySignalJay ? -106 : na, style=shape.triangleup, color=color.lime, location=location.belowbar, size=size.small, title="buy Signal", transp=0)
 // plotshape(crossover(Gamma, 0) ? -106 : na, style=shape.diamond, color=color.lime, location=location.belowbar, size=size.tiny, title="buy Signal", transp=0)
 
 // primary sell signal
-plotshape(sellSignalDiv ? 106 : na, style=shape.triangledown, color=color.fuchsia, location=location.abovebar, size=size.small, title="Primary Sell Signal", transp=0, offset = -2)
+plotshape(sellSignalDiv ? 106 : na, style=shape.triangledown, color=color.red, location=location.abovebar, size=size.small, title="Primary Sell Signal", transp=0, offset = -2)
+alertcondition(buySignalJay, 'Primary Sell (Red Arrow)', 'Red Arrow Primary Sell')
+
 // secondary sell signal
-//plotshape(sellSignal ? 106 : na, style=shape.triangledown, color=color.fuchsia, location=location.abovebar, size=size.tiny, title="Secondary Sell Signal", transp=0)
+//plotshape(sellSignal ? 106 : na, style=shape.triangledown, color=color.red, location=location.abovebar, size=size.tiny, title="Secondary Sell Signal", transp=0)
 
 // tertiary sell signal
-// plotshape(sellSignalJay and wt2 > 0 ? -106 : na, style=shape.triangledown, color=color.fuchsia, location=location.abovebar, size=size.tiny, title="Tertiary Sell Signal", transp=50)
+// plotshape(sellSignalJay and wt2 > 0 ? -106 : na, style=shape.triangledown, color=color.red, location=location.abovebar, size=size.tiny, title="Tertiary Sell Signal", transp=50)
 
 // scalp
 //plotshape(scalpSignalJay ? -106 : na, style=shape.cross, color=color.lime, location=location.belowbar, size=size.tiny, title="Scalp Buy Signal", transp=50)
-
 
 /// testing percent exits
 //percentAsPoints(pcnt) =>
@@ -735,22 +733,50 @@ plotshape(sellSignalDiv ? 106 : na, style=shape.triangledown, color=color.fuchsi
 
 // ---- back testing
 
-strategy.entry("buy", strategy.long, when=primaryBuy or buySignal4h and strategy.position_size < 0)
-// strategy.entry("buy", strategy.long, when=primaryBuy)
-strategy.entry("sell", strategy.short, when=sellSignalDiv and strategy.position_size > 0)
-// Only submit enter long orders
-strategy.risk.allow_entry_in(strategy.direction.long)
+// STEP 1:
+// Configure trail stop level with input options (optional)
+//longTrailPerc = input(title="Trail Long Loss (%)", type=input.float, minval=0.0, step=0.1, defval=1.5) * 0.01
 
-// Determine stop loss price
-longStopPrice  = strategy.position_avg_price * (1 - 0.25)
-shortStopPrice = strategy.position_avg_price * (1 + 0.15)
-// Submit exit orders based on calculated stop loss price
-if (strategy.position_size > 0)
-    strategy.exit(id="XL STP", stop=longStopPrice)
+// STEP 2:
+// Determine trail stop loss prices
+//longStopPrice = 0.0, shortStopPrice = 0.0
 
-if (strategy.position_size < 0)
-    strategy.exit(id="XS STP", stop=shortStopPrice)
+//longStopPrice := if (strategy.position_size > 0)
+//    stopValue = close * (1 - longTrailPerc)
+//    max(stopValue, longStopPrice[1])
+//else
+//    0
 
+// Plot stop loss values for confirmation
+//plot(series=(strategy.position_size > 0) ? longStopPrice : na,
+//     color=color.fuchsia, linewidth=2, style=plot.style_cross)
+
+//ATR = atr(7)
+//if (primaryBuy or buyTriggerWave or buySignalDiv)
+    
+//    // 15 minute
+//    stop_level = close - (close*0.01)
+//    profit_level = close * 1.021
+    
+//    // 30 minute
+//    //stop_level = close - (close*0.015)
+//    //profit_level = close * 1.017
+    
+//    strategy.entry("Buy", strategy.long)
+//    strategy.exit("TP/SL", "Buy", stop=stop_level, limit=profit_level)
+
+////if (sellSignalDiv)
+////    stop_level = high + ATR
+////    profit_level = close - ATR
+////    strategy.entry("Sell", strategy.short)
+////    strategy.exit("TP/SL", "Sell", stop=stop_level, limit=profit_level)
+
+//// STEP 3:
+//// Submit exit orders for trail stop loss price
+////if (strategy.position_size > 0)
+////    strategy.exit(id="XL TRL STP", stop=longStopPrice)
+
+//// Only submit enter long orders
+//strategy.risk.allow_entry_in(strategy.direction.long)
 
 // ----- back testing
-
